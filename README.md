@@ -8,7 +8,7 @@ The dictionary alongside with the affixation rules are taken from OpenOffice.
 
 ## Integrating with Solr
 
-You need to simply add the jar file on the classpath and add the following in your Solr configuration
+You need to simply add the jar file (taken from the latest release), as well as the guava (v.22) and lib/patricia-trie jars on the classpath and add the following in your Solr configuration
 
 ```
 <filter class="bg.bozho.stemmer.BulgarianStemFilterFactory"/>
