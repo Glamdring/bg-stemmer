@@ -11,7 +11,7 @@ The dictionary alongside with the affixation rules are taken from OpenOffice.
 You need to simply add the jar file on the classpath and add the following in your Solr configuration
 
 ```
-<filter class="solr.BulgarianStemFilterFactory"/>
+<filter class="bg.bozho.stemmer.BulgarianStemFilterFactory"/>
 ```
 
 ## Integrating with ElasticSearch
