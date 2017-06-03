@@ -2,12 +2,13 @@ package bg.bozho.stemmer;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
 import org.ardverk.collection.PatriciaTrie;
 import org.ardverk.collection.StringKeyAnalyzer;
 import org.ardverk.collection.Trie;
@@ -16,6 +17,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
+import com.google.common.io.CharStreams;
 
 public class BulgarianStemmer {
 
@@ -25,7 +27,6 @@ public class BulgarianStemmer {
     private LuceneStemmer luceneStemmer = new LuceneStemmer();
     
     public static Map<String, Multimap<String, String>> inflectionClasses = Maps.newHashMap();
-    public static Map<String, Multimap<String, String>> pluralInflectionClasses = Maps.newHashMap();
     
     public static final Set<String> verbClasses = Sets.newHashSet("P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z");
     
@@ -52,12 +53,10 @@ public class BulgarianStemmer {
         InputStream is = BulgarianStemmer.class.getResourceAsStream("/bg_BG.dic");
         List<String> lines = null;
 
-        try {
-            lines = IOUtils.readLines(is, "utf-8");
+        try (Reader reader = new InputStreamReader(is, "UTF-8")){
+            lines = CharStreams.readLines(reader);
         } catch (IOException ex) {
             throw new IllegalStateException(ex);
-        } finally {
-            IOUtils.closeQuietly(is);
         }
 
         Trie<String, Set<String>> dictionary = new PatriciaTrie<String, Set<String>>(StringKeyAnalyzer.CHAR);
@@ -122,20 +121,14 @@ public class BulgarianStemmer {
      public void loadInflections() {
          InputStream inputStreamAll = BulgarianStemmer.class.getResourceAsStream("/bg_BG.aff");
          fillInflectionClasses(inflectionClasses, inputStreamAll);
-
-         InputStream inputStreamPlurals = BulgarianStemmer.class.getResourceAsStream("/plurals.aff");
-         fillInflectionClasses(pluralInflectionClasses, inputStreamPlurals);
-
      }
 
      private void fillInflectionClasses(Map<String, Multimap<String, String>> map, InputStream is) {
          List<String> lines = null;
-         try {
-             lines = IOUtils.readLines(is, "utf-8");
+         try (Reader reader = new InputStreamReader(is, "UTF-8")){
+             lines = CharStreams.readLines(reader);
          } catch (IOException ex) {
              throw new IllegalStateException(ex);
-         } finally {
-             IOUtils.closeQuietly(is);
          }
 
          boolean newInflectionClass = false;
