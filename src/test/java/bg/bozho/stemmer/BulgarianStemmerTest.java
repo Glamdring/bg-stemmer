@@ -13,5 +13,6 @@ public class BulgarianStemmerTest {
         Assert.assertEquals("открив", stemmer.stem("откривахме"));
         Assert.assertEquals("безиде", stemmer.stem("безидейните"));
         Assert.assertEquals("черв", stemmer.stem("червен"));
+        Assert.assertEquals("буууу", stemmer.stem("буууу"));
     }
 }

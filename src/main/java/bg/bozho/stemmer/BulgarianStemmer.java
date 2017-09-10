@@ -36,16 +36,24 @@ public class BulgarianStemmer {
     }
     
     public String stem(String word) {
-        String baseForm = baseFormIndex[formsDictionary.get(word)];
+        Integer idx = formsDictionary.get(word);
+        if (idx == null) {
+            return useDefaultStemmer(word);
+        }
+        String baseForm = baseFormIndex[idx];
         if (baseForm != null) {
             char[] chars = baseForm.toCharArray();
             int len = luceneStemmer.stem(chars, baseForm.length(), false);
             return new String(chars, 0, len);
         } else {
-            char[] chars = word.toCharArray();
-            int len = luceneStemmer.stem(chars, word.length(), true);
-            return new String(chars, 0, len);
+            return useDefaultStemmer(word);
         }
+    }
+
+    private String useDefaultStemmer(String word) {
+        char[] chars = word.toCharArray();
+        int len = luceneStemmer.stem(chars, word.length(), true);
+        return new String(chars, 0, len);
     }
     
     private Trie<String, Set<String>> loadDictionary() {
